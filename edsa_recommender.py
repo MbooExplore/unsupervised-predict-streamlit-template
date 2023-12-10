@@ -110,40 +110,48 @@ def main():
 
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
-        submenu = st.sidebar.selectbox("Submenu", ["Overview", "EDA Section", "Model Perfomance"])
+        submenu = st.sidebar.selectbox("Submenu", ["Overview", "EDA Section"])
 
         if submenu == "Overview":
             st.write("""
             #### Solution Overview Content
                 - Model Definitions: A brief summary of Models experimented
-    - EDA Section: Exploratory Data Analysis of Data 
-	- Model Perfomance Section: Comparison of models
-    - User Feedback: Tell us about your experience using this app. 
+                - EDA Section: Exploratory Data Analysis of Data 
+	 
 
 			""")
             st.write("#")
 
             with st.expander("Model Definitions"):
                 
-                # Display the results side by side
-                st.subheader("Non_Negative Matrix Factorization Model:")
-                st.write("The Non-Negative Matrix Factorization (NMF) algorithm leverages principles from multivariate analysis \
-                        and linear algebra. Its purpose is to break down a given data matrix, represented as M, into the product of two matrices with lower ranks, \
-                        namely W and H. The sub-matrix W represents the NMF basis, while the sub-matrix H contains the corresponding coefficients.")
-                
-                st.subheader("Single Value Decomposition Model:")
+                st.subheader("Content-based Filtering:")
+                st.write("In Content-based Filtering, we seek to make recommendations based on **how similar the properties or features of an item are to other items**.")
+                st.write("""
+                         We follow the following steps to make the recommendations:
+                            1. Select an initial item (book) to generate recommendations from. 
+                            2. Extract all the similarity values between the initial item and each other item in the similarity matrix.
+                            3. Sort the resulting values in descending order. 
+                            4. Select the top N similarity values, and return the corresponding item details to the user. This is now our simple top-N list.
+                         """)
+                st.write("#")
+                st.subheader("Collaborative-based filtering:")
+                st.write("In Collaborative-based filtering, we **use the similarity measured between users to make recommendations**. In our model, we used the SVD model to generate the similarities.")
                 st.write("Single Value Decomposition (SVD) is a fundamental matrix factorization technique used in linear algebra and numerical analysis. \
                         The beauty of SVD lies in its ability to reduce the dimensionality of the original matrix while preserving its essential information. \
                         By truncating the number of singular values and their corresponding vectors, we can approximate the original matrix using a lower-rank approximation.\
                         It can be used to factorize a user-item interaction matrix to identify latent factors (features) that contribute to the preferences of users for different items. \
                         This technique is known as matrix factorization and has been successfully applied in recommender systems to make personalized recommendations.")
+                st.write("""
+                        In order to produce a list of top-N recommendations for collaborative filtering, the following simple algorithm can be followed: 
+                         
+                            1. Select an initial reference user to generate recommendations for. 
+                            2. Extract all the similarity values between the reference user and each other user in the similarity matrix.
+                            3. Sort the resulting similarity values in descending order, and select the $k$ most similar users based on these values.  
+                            5. For each selected user, collect their top-rated items. 
+                            6. Form a tally of which items are most popular across the $k$ similar users. Do this by counting how many times a top-rated item is common amongst the other users. 
+                            7. Sort the top-rated items according the the popularity tally. Return the top-N values as the result. 
+                        """)
 
-                st.subheader("Co-Clustering Model:")
-                st.write("Co-Clustering, also known as biclustering or co-clustering, is a machine learning technique used to simultaneously cluster both rows and columns of a data matrix. \
-                        It is particularly useful when dealing with data that exhibits natural grouping patterns in both dimensions. The goal of the Co-Clustering algorithm is to find an optimal \
-                        partitioning of the rows and columns that maximizes a clustering criterion, such as minimizing the sum of squared differences between elements within each cluster.")
-        
-            st.write("#")
 
         elif submenu == "EDA Section":
             
@@ -280,24 +288,7 @@ def main():
                 st.write("This reveals that all the movies in the top 10 by Number of Ratings were released in the 90's with only \
                          one Indicating certain likeness for users to this class of classical movies.")
             st.write("#")
-
-        elif submenu == "Model Perfomance":
-            with st.expander("Model Performance", expanded=True):
-                st.write("RMSE is a popular evaluation metric in various machine learning tasks, particularly in regression problems, where the goal is to predict a continuous numerical output. \
-                            It provides a measure of the model's average prediction error, with a lower RMSE indicating better predictive accuracy.")
-                rmse_scores = [0.78, 0.81, 0.89]
-                trained_models = ['Single Value Decomposition', 'Single Value Decomposition', 'Co-Clustering']
-
-                model_performance = pd.DataFrame({'Model': trained_models, 'RMSE': rmse_scores})
-
-                # Display the model performance table
-                st.subheader("Model Performance:")
-                st.table(model_performance)
-
-                # Highlight the best model based on RMSE score
-                best_model = model_performance.loc[model_performance['RMSE'].idxmin(), 'Model']
-                st.subheader(f"The best model is {best_model} with RMSE: {model_performance['RMSE'].min()}")
-            st.write("#")      
+  
 
 
 if __name__ == '__main__':
